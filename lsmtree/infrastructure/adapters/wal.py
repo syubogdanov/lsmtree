@@ -22,8 +22,7 @@ class WriteAheadLog(Interface):
 
     def write(self: Self, key: Key, value: Value | None) -> None:
         """Записать значение по ключу."""
-        writer = Writer(self._descriptor)
-        writer.write(key, value)
+        Writer(self._descriptor).write(key, value)
         self._descriptor.flush()
 
     def clear(self: Self) -> None:
