@@ -7,6 +7,8 @@
     </a>
 </div>
 
+<br>
+
 LSM-Tree (also known as *log-structured merge-tree*) is a disk-based data structure that provides an  efficient index
 access to key-value pairs with high insert volume.
 
