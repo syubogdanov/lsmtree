@@ -24,5 +24,3 @@ class Writer:
         if value is not None:
             self.buffer.write(len(value).to_bytes(BYTES_UINT32))
             self.buffer.write(value)
-
-        self.buffer.flush()

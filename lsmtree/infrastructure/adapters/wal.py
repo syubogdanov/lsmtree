@@ -24,6 +24,7 @@ class WriteAheadLog(Interface):
         """Записать значение по ключу."""
         writer = Writer(self._descriptor)
         writer.write(key, value)
+        self._descriptor.flush()
 
     def clear(self: Self) -> None:
         """Очистить журнал предзаписи."""
