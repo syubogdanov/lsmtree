@@ -14,14 +14,6 @@ access to key-value pairs with high insert volume.
 
 For more, see the [documentation][github/docs].
 
-### Installation
-
-The module is available as:
-
-```shell
-go get github.com/syubogdanov/lsmtree
-```
-
 ## License
 
 MIT License, Copyright (c) 2024 Sergei Bogdanov. See [LICENSE][github/license] file.

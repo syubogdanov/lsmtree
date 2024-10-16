@@ -1,8 +1,25 @@
+# Environments
+.venv/
+
 # GoLand
 .idea/
 
 # LSM-Tree
 .tmp/
+
+# MyPy
+.mypy_cache/
+
+# Poetry
+poetry.lock
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ruff
+.ruff_cache/
 
 # Visual Studio Code
 .vscode/
