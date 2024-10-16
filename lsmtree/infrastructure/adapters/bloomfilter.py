@@ -11,7 +11,7 @@ from lsmtree.utils.limits import MAX_UINT32
 from lsmtree.utils.typing import Uint32
 
 
-@dataclass
+@dataclass(frozen=True)
 class BloomFilter(Interface):
     """Реализация фильтра Блума."""
 

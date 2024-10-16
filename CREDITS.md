@@ -1,11 +1,12 @@
 # Credits Section
 
-| Name            | Author               | Web-Service    | License        |
-|-----------------|----------------------|----------------|----------------|
-| [Tree Icon][01] | [@flaticon][02]      | [Flaticon][03] | [Flaticon][04] |
-| [poetry][05]    | [@python-poetry][06] | [GitHub][07]   | [MIT][08]      |
-| [mypy][09]      | [@python][10]        | [GitHub][11]   | [MIT][12]      |
-| [ruff][13]      | [@astral-sh][14]     | [GitHub][15]   | [MIT][16]      |
+| Name                   | Author               | Web-Service    | License          |
+|------------------------|----------------------|----------------|------------------|
+| [Tree Icon][01]        | [@flaticon][02]      | [Flaticon][03] | [Flaticon][04]   |
+| [poetry][05]           | [@python-poetry][06] | [GitHub][07]   | [MIT][08]        |
+| [mypy][09]             | [@python][10]        | [GitHub][11]   | [MIT][12]        |
+| [ruff][13]             | [@astral-sh][14]     | [GitHub][15]   | [MIT][16]        |
+| [sortedcontainers][17] | [@grantjenks][18]    | [GitHub][19]   | [Apache-2.0][20] |
 
 [01]: https://www.flaticon.com/free-icon/tree_2298458
 [02]: https://www.flaticon.com/authors/creatype
@@ -26,3 +27,8 @@
 [14]: https://github.com/astral-sh
 [15]: https://github.com
 [16]: https://github.com/astral-sh/ruff/blob/main/LICENSE
+
+[17]: https://github.com/grantjenks/python-sortedcontainers
+[18]: https://github.com/grantjenks
+[19]: https://github.com
+[20]: https://github.com/grantjenks/python-sortedcontainers/blob/master/LICENSE

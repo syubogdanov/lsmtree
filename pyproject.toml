@@ -25,6 +25,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "~3.11"
+sortedcontainers = "~2.4"
 
 [tool.poetry.group.lint]
 optional = true

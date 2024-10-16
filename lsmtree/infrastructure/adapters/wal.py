@@ -10,7 +10,7 @@ from lsmtree.infrastructure.adapters.reader import Reader
 from lsmtree.infrastructure.adapters.writer import Writer
 
 
-@dataclass
+@dataclass(frozen=True)
 class WriteAheadLog(Interface):
     """Реалиация журнала предзаписи."""
 
