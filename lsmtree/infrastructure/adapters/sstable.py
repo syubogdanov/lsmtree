@@ -22,7 +22,7 @@ class SortedStringTable(Interface):
 
     def get(self: Self, key: Key) -> Value | None:
         """Получить значение по ключу."""
-        if key not in self:
+        if not self.bloomfilter.test(key):
             detail = "The key does not exist"
             raise KeyError(detail)
 
@@ -35,8 +35,17 @@ class SortedStringTable(Interface):
             candidate: Key | None = None
             value: Value | None = None
 
-            while candidate != key:
+            while (candidate is None or candidate < key) and reader.has_next():
                 candidate, value = reader.read()
+
+        if reader.is_broken():
+            with self.path.open(mode="ab") as buffer:
+                buffer.truncate(reader.offset)
+                buffer.flush()
+
+        if key != candidate:
+            detail = "The key does not exist"
+            raise KeyError(detail)
 
         return value
 
