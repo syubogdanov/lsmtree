@@ -9,7 +9,7 @@ from lsmtree.utils.typing import PositiveInt, Uint32, UnsignedInt
 
 
 @dataclass
-class Reader:
+class KeyValueReader:
     """Оператор чтения ключей и значений."""
 
     buffer: BufferedReader
@@ -71,6 +71,9 @@ class Reader:
         """Подтянуть следуюущую пару."""
         self._is_fetched = True
 
+        if self.buffer.closed:
+            return
+
         key, is_empty_or_broken = self._read_key()
         if is_empty_or_broken:
             return
@@ -124,8 +127,8 @@ class Reader:
         if is_empty_or_broken:
             return (Uint32(), True)
 
-        length = Uint32.from_bytes(chunk)
-        return (length, False)
+        value = Uint32.from_bytes(chunk)
+        return (value, False)
 
     def _read_bool(self: Self) -> tuple[bool, bool]:
         """Вычитать булево значение."""

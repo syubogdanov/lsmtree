@@ -8,7 +8,7 @@ from lsmtree.utils.size import BYTES_UINT32
 
 
 @dataclass(frozen=True)
-class Writer:
+class KeyValueWriter:
     """Оператор записи ключей и значений."""
 
     buffer: BufferedWriter
@@ -18,8 +18,8 @@ class Writer:
         self.buffer.write(len(key).to_bytes(BYTES_UINT32))
         self.buffer.write(key)
 
-        tombstone_flag = int(value is None)
-        self.buffer.write(tombstone_flag.to_bytes(1))
+        tombstone = int(value is None)
+        self.buffer.write(tombstone.to_bytes(1))
 
         if value is not None:
             self.buffer.write(len(value).to_bytes(BYTES_UINT32))

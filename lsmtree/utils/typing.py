@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Annotated
 
-from lsmtree.utils.limits import MAX_UINT32
+from lsmtree.utils.limits import MAX_UINT32, MAX_UINT512
 
 
 @dataclass
@@ -26,3 +26,4 @@ UnsignedInt = Annotated[int, IntCompare(ge=0)]
 PositiveInt = Annotated[int, IntCompare(gt=0)]
 
 Uint32 = Annotated[UnsignedInt, IntCompare(le=MAX_UINT32)]
+Uint512 = Annotated[UnsignedInt, IntCompare(le=MAX_UINT512)]

@@ -6,8 +6,8 @@ from typing import Self
 from lsmtree.domain.entities.key import Key
 from lsmtree.domain.entities.value import Value
 from lsmtree.domain.services.interfaces.wal import WriteAheadLog as Interface
-from lsmtree.infrastructure.adapters.reader import Reader
-from lsmtree.infrastructure.adapters.writer import Writer
+from lsmtree.infrastructure.adapters.kvreader import KeyValueReader
+from lsmtree.infrastructure.adapters.kvwriter import KeyValueWriter
 
 
 @dataclass(frozen=True)
@@ -22,7 +22,8 @@ class WriteAheadLog(Interface):
 
     def write(self: Self, key: Key, value: Value | None) -> None:
         """Записать значение по ключу."""
-        Writer(self._descriptor).write(key, value)
+        writer = KeyValueWriter(self._descriptor)
+        writer.write(key, value)
         self._descriptor.flush()
 
     def clear(self: Self) -> None:
@@ -33,7 +34,7 @@ class WriteAheadLog(Interface):
     def __iter__(self: Self) -> Iterator[tuple[Key, Value | None]]:
         """Получить итератор по журналу."""
         with self.path.open(mode="rb") as buffer:
-            reader = Reader(buffer)
+            reader = KeyValueReader(buffer)
 
             while reader.has_next():
                 key, value = reader.read()
