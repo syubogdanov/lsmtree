@@ -39,7 +39,7 @@ class SparseIndex:
 
         return offset
 
-    def build(self: Self, iterable: Iterable[tuple[Key, Uint512]]) -> "SparseIndex":
+    def build(self: Self, iterable: Iterable[tuple[Key, Uint512]]) -> None:
         """Сформировать индекс по итерируемому объекту.
 
         Примечания:
