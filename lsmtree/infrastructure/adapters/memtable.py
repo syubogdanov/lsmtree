@@ -17,7 +17,7 @@ class MemTable(Interface):
 
     _sorted_dict: SortedDict[Key, Value | None] = field(default_factory=SortedDict)
 
-    def put(self: Self, key: Key, value: Value | None) -> bool:
+    def put(self: Self, key: Key, value: Value | None) -> None:
         """Записать значение по ключу."""
         self._sorted_dict[key] = value
 

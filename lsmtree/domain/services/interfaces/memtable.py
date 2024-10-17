@@ -11,7 +11,7 @@ class MemTable(Protocol):
     """Интерфейс структуры данных `MemTable`."""
 
     @abstractmethod
-    def put(self: Self, key: Key, value: Value | None) -> bool:
+    def put(self: Self, key: Key, value: Value | None) -> None:
         """Записать значение по ключу."""
 
     @abstractmethod

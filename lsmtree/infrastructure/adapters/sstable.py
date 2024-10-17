@@ -32,7 +32,7 @@ class SortedStringTable(Interface):
 
             reader = KeyValueReader(buffer)
 
-            candidate: str | None = None
+            candidate: Key | None = None
             value: Value | None = None
 
             while candidate != key:
@@ -50,9 +50,9 @@ class SortedStringTable(Interface):
             buffer.seek(offset)
 
             reader = KeyValueReader(buffer)
-            candidate: str | None = None
+            candidate: Key | None = None
 
-            while candidate < key and reader.has_next():
+            while (candidate is None or candidate < key) and reader.has_next():
                 candidate, _ = reader.read()
 
         if reader.is_broken():

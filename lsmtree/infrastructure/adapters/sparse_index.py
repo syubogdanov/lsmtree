@@ -63,7 +63,7 @@ class SparseIndexReader:
     _offset_debt: UnsignedInt = 0
 
     _key: Key | None = None
-    _value: Uint512 | None = None
+    _value: Uint512 = 0
 
     _is_fetched: bool = False
     _has_errors: bool = False
@@ -87,7 +87,7 @@ class SparseIndexReader:
         self._offset_debt = 0
 
         self._key = None
-        self._value = None
+        self._value = 0
 
         self._is_fetched = False
 
