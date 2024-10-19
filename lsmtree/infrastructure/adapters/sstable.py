@@ -24,7 +24,7 @@ class SortedStringTable(Interface):
     _sparse_index: SparseIndexInterface | None = None
 
     # Фильтра Блума требует указания числа хэшей
-    _number_of_hashes: ClassVar[PositiveInt] = 4
+    _number_of_hashes: ClassVar[PositiveInt] = 3
 
     # Индекс требует расстояние между ключами
     _distance: ClassVar[PositiveInt] = 32
