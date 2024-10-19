@@ -93,12 +93,12 @@ class SortedStringTable(Interface):
     def _guarantee_efficiency(self: Self) -> None:
         """Прогрузить структуры данных, требующиеся для эффективности."""
         if self._bloom_filter is None:
-            self._build_bloom_filter()
+            self._load_bloom_filter()
 
         if self._sparse_index is None:
-            self._build_sparse_index()
+            self._load_sparse_index()
 
-    def _build_bloom_filter(self: Self) -> None:
+    def _load_bloom_filter(self: Self) -> None:
         """Построить фильтр Блума."""
         if self.level.has_trusted_bloom_filter():
             with self.level.bloom_filter.open(mode="rb") as buffer:
@@ -127,7 +127,7 @@ class SortedStringTable(Interface):
 
                 offset = reader.offset
 
-    def _build_sparse_index(self: Self) -> None:
+    def _load_sparse_index(self: Self) -> None:
         """Построить разреженный индекс."""
         self._sparse_index = SparseIndex(self.level.sparse_index)
 
