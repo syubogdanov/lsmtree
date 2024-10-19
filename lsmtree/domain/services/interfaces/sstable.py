@@ -1,22 +1,18 @@
 from abc import abstractmethod
-from collections.abc import Iterator
+from dataclasses import dataclass
 from typing import Protocol, Self
 
-from lsmtree.domain.entities.key import Key
-from lsmtree.domain.entities.value import Value
+from lsmtree.domain.dtypes.bytes32 import Bytes32
 
 
+@dataclass
 class SortedStringTable(Protocol):
     """Интерфейс структуры данных `SSTable`."""
 
     @abstractmethod
-    def get(self: Self, key: Key) -> Value | None:
+    def get(self: Self, key: Bytes32) -> Bytes32 | None:
         """Получить значение по ключу."""
 
     @abstractmethod
-    def __contains__(self: Self, key: Key) -> bool:
+    def __contains__(self: Self, key: Bytes32) -> bool:
         """Проверить наличие ключа."""
-
-    @abstractmethod
-    def __iter__(self: Self) -> Iterator[tuple[Key, Value | None]]:
-        """Получить итератор по упорядоченным парам."""

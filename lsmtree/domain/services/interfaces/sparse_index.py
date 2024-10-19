@@ -1,24 +1,27 @@
 from abc import abstractmethod
-from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Self
+from pathlib import Path
+from typing import Protocol, Self
 
-from lsmtree.domain.entities.key import Key
-from lsmtree.utils.typing import Uint512
+from lsmtree.domain.dtypes.bytes32 import Bytes32
+from lsmtree.domain.dtypes.uint1024 import Uint1024
+from lsmtree.utils.typing import NonNegativeInt, SortedIterable
 
 
-@dataclass(frozen=True)
-class SparseIndex:
-    """Разреженный индекс смещений."""
+@dataclass
+class SparseIndex(Protocol):
+    """Разреженный индекс."""
+
+    path: Path
 
     @abstractmethod
-    def get(self: Self, key: Key) -> Uint512:
+    def get(self: Self, key: Bytes32) -> Uint1024:
         """Получить ближайшее к ключу смещение."""
 
     @abstractmethod
-    def build(self: Self, iterable: Iterable[tuple[Key, Uint512]]) -> None:
-        """Сформировать индекс по итерируемому объекту.
-
-        Примечания:
-            * Итерируемый объект должен быть отсортирован по ключам.
-        """
+    def from_iterable(
+        self: Self,
+        iterable: SortedIterable[tuple[Bytes32, Uint1024]],
+        distance: NonNegativeInt,
+    ) -> None:
+        """Построить индекс."""

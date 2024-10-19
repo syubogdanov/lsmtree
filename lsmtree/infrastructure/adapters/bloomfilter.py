@@ -5,17 +5,17 @@ from dataclasses import dataclass, field
 from io import BufferedReader, BufferedWriter
 from typing import Self
 
+from lsmtree.domain.dtypes.uint32 import Uint32
 from lsmtree.domain.services.interfaces.bloomfilter import BloomFilter as Interface
-from lsmtree.utils.bitset import BitSet
-from lsmtree.utils.limits import MAX_UINT32
-from lsmtree.utils.typing import Uint32
+from lsmtree.infrastructure.adapters.bitset import BitSet
+from lsmtree.utils.typing import PositiveInt
 
 
-@dataclass(frozen=True)
+@dataclass
 class BloomFilter(Interface):
     """Реализация фильтра Блума."""
 
-    number_of_hashes: Uint32
+    number_of_hashes: PositiveInt
 
     _bitset: BitSet = field(default_factory=BitSet)
 
@@ -52,16 +52,16 @@ class BloomFilter(Interface):
         """
         return pickle.load(buffer)
 
-    def _get_seed_iterator(self: Self) -> Iterator[Uint32]:
+    def _get_seed_iterator(self: Self) -> Iterator[int]:
         """Получить итератор по сидам."""
         return iter(range(self.number_of_hashes))
 
     @staticmethod
-    def _hash(data: Hashable, seed: Uint32) -> int:
+    def _hash(data: Hashable, seed: int) -> int:
         """Получить хэш объекта."""
         return hash(data) ^ seed
 
     @staticmethod
-    def _hash_to_bit(hash_: int) -> Uint32:
+    def _hash_to_bit(hash_: int) -> int:
         """Отобразить хэш в бит."""
-        return hash_ % (MAX_UINT32 + 1)
+        return hash_ % (Uint32.max + 1)

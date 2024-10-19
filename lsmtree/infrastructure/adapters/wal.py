@@ -3,14 +3,13 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Self
 
-from lsmtree.domain.entities.key import Key
-from lsmtree.domain.entities.value import Value
+from lsmtree.domain.dtypes.bytes32 import Bytes32
 from lsmtree.domain.services.interfaces.wal import WriteAheadLog as Interface
-from lsmtree.infrastructure.adapters.kvreader import KeyValueReader
-from lsmtree.infrastructure.adapters.kvwriter import KeyValueWriter
+from lsmtree.infrastructure.adapters.readers.keyvalue import Reader
+from lsmtree.infrastructure.adapters.writers.keyvalue import Writer
 
 
-@dataclass(frozen=True)
+@dataclass
 class WriteAheadLog(Interface):
     """Реалиация журнала предзаписи."""
 
@@ -20,10 +19,10 @@ class WriteAheadLog(Interface):
         """Дополнительная инициализация объекта."""
         self._descriptor = self.path.open(mode="ab")
 
-    def write(self: Self, key: Key, value: Value | None) -> None:
+    def write(self: Self, key: Bytes32, value: Bytes32 | None) -> None:
         """Записать значение по ключу."""
-        writer = KeyValueWriter(self._descriptor)
-        writer.write(key, value)
+        pair = (key, value)
+        Writer(self._descriptor).write(pair)
         self._descriptor.flush()
 
     def clear(self: Self) -> None:
@@ -31,10 +30,10 @@ class WriteAheadLog(Interface):
         self._descriptor.close()
         self._descriptor = self.path.open(mode="wb")
 
-    def __iter__(self: Self) -> Iterator[tuple[Key, Value | None]]:
+    def __iter__(self: Self) -> Iterator[tuple[Bytes32, Bytes32 | None]]:
         """Получить итератор по журналу."""
         with self.path.open(mode="rb") as buffer:
-            reader = KeyValueReader(buffer)
+            reader = Reader(buffer)
 
             while reader.has_next():
                 key, value = reader.read()
