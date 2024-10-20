@@ -18,10 +18,10 @@ class LSMTree:
 
     root: Path
 
-    # Размер `MemTable`, после которого она станет `SSTable` [в байтах]
+    # Размер `MemTable`, по достижении которого будет выгрузка на диск [в байтах]
     _memtable_threshold: ClassVar[NonNegativeInt] = 1024 * 1024  # 1 MiB
 
-    # Количество `SSTable`, модели которых можно прогрузить в RAM
+    # Количество экземпляров `SSTable`, которые можно выгрузить в RAM
     # Примечание: в оперативной памяти хранятся лишь фильтры Блума
     _number_of_cached_sstables: ClassVar[NonNegativeInt] = 128
 
@@ -43,9 +43,6 @@ class LSMTree:
 
         if self._memtable.size > self._memtable_threshold:
             self._flush_memtable()
-
-        for level in self._storage:
-            merger.merge(level)
 
     def __setitem__(self: Self, key: bytes, value: bytes) -> None:
         """Установить значение по ключу."""

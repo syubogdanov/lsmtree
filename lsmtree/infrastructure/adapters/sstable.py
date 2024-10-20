@@ -11,6 +11,7 @@ from lsmtree.infrastructure.adapters.bloomfilter import BloomFilter
 from lsmtree.infrastructure.adapters.readers.keyvalue import Reader
 from lsmtree.infrastructure.adapters.sparse_index import SparseIndex
 from lsmtree.infrastructure.adapters.writers.keyvalue import Writer
+from lsmtree.utils.itertools import batched
 from lsmtree.utils.typing import PositiveInt, SortedIterable, SortedIterator
 
 
@@ -116,8 +117,9 @@ class SortedStringTable(Interface):
 
         self._bloom_filter = BloomFilter(self._number_of_hashes)
 
-        for key, _ in self:
-            self._bloom_filter.add(key)
+        for batch in batched(self):
+            for key, _ in batch:
+                self._bloom_filter.add(key)
 
         with self.level.bloom_filter.open(mode="wb") as buffer:
             self._bloom_filter.dump(buffer)

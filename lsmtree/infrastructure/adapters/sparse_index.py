@@ -7,7 +7,7 @@ from lsmtree.domain.dtypes.uint1024 import Uint1024
 from lsmtree.domain.services.interfaces.sparse_index import SparseIndex as Interface
 from lsmtree.infrastructure.adapters.readers.keyoffset import Reader
 from lsmtree.infrastructure.adapters.writers.keyoffset import Writer
-from lsmtree.utils.itertools import distanced
+from lsmtree.utils.itertools import batched, distanced
 from lsmtree.utils.typing import NonNegativeInt, SortedIterable
 
 
@@ -43,6 +43,7 @@ class SparseIndex(Interface):
         with self.path.open(mode="wb") as buffer:
             writer = Writer(buffer)
 
-            for key, offset in distanced(iterable, distance):
-                pair = (key, offset)
-                writer.write(pair)
+            for batch in batched(iterable):
+                for key, offset in distanced(batch, distance):
+                    pair = (key, offset)
+                    writer.write(pair)
