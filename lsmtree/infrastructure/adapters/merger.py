@@ -64,9 +64,14 @@ class Merger(Interface):
             if sandbox_pair is None or sstable_pair is None:
                 break
 
-            if sandbox_key <= sstable_key:
+            if sandbox_key < sstable_key:
                 yield sandbox_pair
                 sandbox_pair = None
+
+            elif sandbox_key == sstable_key:
+                yield sandbox_pair
+                sandbox_pair = None
+                sstable_pair = None
 
             else:
                 yield sstable_pair

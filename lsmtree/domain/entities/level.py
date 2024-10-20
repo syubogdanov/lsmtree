@@ -94,7 +94,7 @@ class Level:
     def untrust_sparse_index(self: Self) -> None:
         """Перестать доверять разреженному индексу."""
         self.sparse_index_trust_label.unlink(missing_ok=True)
-        self.sparse_index_trust_label.unlink(missing_ok=True)
+        self.sparse_index.unlink(missing_ok=True)
 
     def has_trusted_sparse_index(self: Self) -> bool:
         """Проверить, можно ли доверять разреженному индексу."""

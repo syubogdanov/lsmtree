@@ -19,7 +19,7 @@ class LSMTree:
     root: Path
 
     # Размер `MemTable`, после которого она станет `SSTable` [в байтах]
-    _memtable_threshold: ClassVar[NonNegativeInt] = 56  # 64 KiB
+    _memtable_threshold: ClassVar[NonNegativeInt] = 64 * 1024  # 64 KiB
 
     # Количество `SSTable`, модели которых можно прогрузить в RAM
     # Примечание: в оперативной памяти хранятся лишь фильтры Блума
