@@ -49,6 +49,14 @@ class LSMTree:
 
     def __setitem__(self: Self, key: bytes, value: bytes) -> None:
         """Установить значение по ключу."""
+        if not isinstance(key, bytes):
+            detail = "The key must be 'bytes'"
+            raise TypeError(detail)
+
+        if not isinstance(value, bytes):
+            detail = "The value must be 'bytes'"
+            raise TypeError(detail)
+
         if not (Bytes32.min_len <= len(key) <= Bytes32.max_len):
             detail = f"The key {key!r} is too long..."
             raise ValueError(detail)
@@ -66,6 +74,10 @@ class LSMTree:
 
     def __delitem__(self: Self, key: bytes) -> None:
         """Удалить значение по ключу."""
+        if not isinstance(key, bytes):
+            detail = "The key must be 'bytes'"
+            raise TypeError(detail)
+
         if not (Bytes32.min_len <= len(key) <= Bytes32.max_len):
             detail = f"The key {key!r} is too long..."
             raise ValueError(detail)
@@ -78,6 +90,10 @@ class LSMTree:
 
     def __getitem__(self: Self, key: bytes) -> bytes:
         """Получить значение по ключу."""
+        if not isinstance(key, bytes):
+            detail = "The key must be 'bytes'"
+            raise TypeError(detail)
+
         if not (Bytes32.min_len <= len(key) <= Bytes32.max_len):
             detail = f"The key {key!r} is too long..."
             raise ValueError(detail)
@@ -110,6 +126,10 @@ class LSMTree:
 
     def __contains__(self: Self, key: bytes) -> bool:
         """Проверить, есть ли ключ в дереве."""
+        if not isinstance(key, bytes):
+            detail = "The key must be 'bytes'"
+            raise TypeError(detail)
+
         if not (Bytes32.min_len <= len(key) <= Bytes32.max_len):
             detail = f"The key '{key!r}' is too long..."
             raise ValueError(detail)
