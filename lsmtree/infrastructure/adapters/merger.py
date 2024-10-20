@@ -38,47 +38,44 @@ class Merger(Interface):
 
     def _get_iterator(self: Self, level: Level) -> SortedIterator[tuple[Bytes32, Bytes32 | None]]:
         """Получить итератор по объединенным `SSTable`."""
-        controller = SortedStringTable(level)
+        iterator_factory = SortedStringTable(level)
 
-        sandbox_is_done: bool = False
-        sstable_is_done: bool = False
+        sandbox_iterator = iterator_factory.over_sandbox()
+        sstable_iterator = iter(iterator_factory)
 
-        sandbox = controller.over_sandbox()
-        sstable = iter(controller)
+        sandbox_pair: tuple[Bytes32, Bytes32 | None] | None = None
+        sstable_pair: tuple[Bytes32, Bytes32 | None] | None = None
 
-        pop_from_sandbox: bool = True
-        pop_from_sstable: bool = True
-
-        while not sandbox_is_done or not sstable_is_done:
-            if pop_from_sandbox:
+        while True:
+            if sandbox_pair is None:
                 try:
-                    sandbox_key, sandbox_value = next(sandbox)
+                    sandbox_key, sandbox_value = next(sandbox_iterator)
+                    sandbox_pair = sandbox_key, sandbox_value
                 except StopIteration:
-                    sandbox_is_done = True
-                    break
+                    pass
 
-            if pop_from_sstable:
+            if sstable_pair is None:
                 try:
-                    sstable_key, sstable_value = next(sstable)
+                    sstable_key, sstable_value = next(sstable_iterator)
+                    sstable_pair = sstable_key, sstable_value
                 except StopIteration:
-                    sstable_is_done = True
-                    break
+                    pass
 
-            if sandbox_key < sstable_key:
-                pop_from_sandbox = True
-                yield (sandbox_key, sandbox_value)
+            if sandbox_pair is None or sstable_pair is None:
+                break
 
-            elif sandbox_key == sstable_key:
-                pop_from_sandbox = True
-                pop_from_sstable = True
-                yield (sandbox_key, sandbox_value)
+            if sandbox_key <= sstable_key:
+                yield sandbox_pair
+                sandbox_pair = None
 
             else:
-                pop_from_sstable = True
-                yield (sstable_key, sstable_value)
+                yield sstable_pair
+                sstable_pair = None
 
-        if sandbox_is_done:
-            yield from sstable
+        if sandbox_pair is not None:
+            yield sandbox_pair
+            yield from sandbox_iterator
 
-        if sstable_is_done:
-            yield from sandbox
+        if sstable_pair is not None:
+            yield sstable_pair
+            yield from sstable_iterator

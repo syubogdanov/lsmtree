@@ -41,7 +41,7 @@ class MemTable(Interface):
     @property
     def size(self: Self) -> NonNegativeInt:
         """Получить размер таблицы в байтах."""
-        return getsizeof(self)
+        return sum(getsizeof(key) + getsizeof(value) for key, value in self._sorted_dict.items())
 
     def __contains__(self: Self, key: Bytes32) -> bool:
         """Проверить наличие ключа."""

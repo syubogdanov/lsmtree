@@ -19,7 +19,7 @@ class LSMTree:
     root: Path
 
     # Размер `MemTable`, после которого она станет `SSTable` [в байтах]
-    _memtable_threshold: ClassVar[NonNegativeInt] = 64 * 1024  # 64 KiB
+    _memtable_threshold: ClassVar[NonNegativeInt] = 56  # 64 KiB
 
     # Количество `SSTable`, модели которых можно прогрузить в RAM
     # Примечание: в оперативной памяти хранятся лишь фильтры Блума
@@ -31,12 +31,21 @@ class LSMTree:
         self._wal = WriteAheadLog(self._storage.wal)
         self._memtable = MemTable(self._wal)
 
-        self._sstables = [
-            SortedStringTable(self._storage.get_level(serial))
+        self._sstables = {
+            serial: SortedStringTable(self._storage.get_level(serial))
             for serial in range(1, self._number_of_cached_sstables + 1)
-        ]
+        }
 
-        self._merge_levels()
+        merger = Merger()
+
+        for level in self._storage:
+            merger.merge(level)
+
+        if self._memtable.size > self._memtable_threshold:
+            self._flush_memtable()
+
+        for level in self._storage:
+            merger.merge(level)
 
     def __setitem__(self: Self, key: bytes, value: bytes) -> None:
         """Установить значение по ключу."""
@@ -134,13 +143,7 @@ class LSMTree:
         sstable = self._get_sstable(level)
         sstable.from_iterable(iter(self._memtable))
 
-        self._merge_levels()
-
-        self._memtable.clear()
-
-    def _merge_levels(self: Self) -> None:
-        """Выполнить слияние уровней."""
-        level = self._storage.get_first_level()
-
         merger = Merger()
         merger.merge(level)
+
+        self._memtable.clear()

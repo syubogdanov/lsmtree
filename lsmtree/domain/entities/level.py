@@ -49,7 +49,7 @@ class Level:
     @cached_property
     def sandbox_trust_label(self: Self) -> FilePath:
         """Путь до метки доверия песочной `SSTable`."""
-        return self.path / "sstable-ack.db"
+        return self.path / "sandbox-ack.db"
 
     def trust_sandbox(self: Self) -> None:
         """Доверять песочной `SSTable`."""
@@ -102,7 +102,7 @@ class Level:
 
     def is_empty(self: Self) -> bool:
         """Проверить, существует ли `SSTable` на данном уровне."""
-        return self.sstable.exists()
+        return not self.sstable.exists()
 
     @cached_property
     def merge_label(self: Self) -> FilePath:
