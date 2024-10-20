@@ -79,6 +79,10 @@ class Reader(Interface[Bytes32]):
             return
 
         length = self._uint32_reader.read()
+        if not length:
+            bytes32 = Bytes32(b"")
+            self._storage = bytes32
+            return
 
         chunk = self.buffer.read(length)
         self._offset_debt += len(chunk)

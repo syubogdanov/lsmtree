@@ -15,4 +15,5 @@ class Writer(Interface[bytes]):
     def write(self: Self, data: bytes) -> None:
         """Записать значение."""
         Uint32Writer(self.buffer).write(len(data))
-        self.buffer.write(data)
+        if len(data) > 0:
+            self.buffer.write(data)
