@@ -72,11 +72,20 @@ class SortedStringTable(Interface):
 
         self.level.trust_sandbox()
 
+    def over_sandbox(self: Self) -> SortedIterator[tuple[Bytes32, Bytes32 | None]]:
+        """Получить итератор по таблице из песочницы."""
+        with self.level.sandbox.open(mode="rb") as buffer:
+            reader = Reader(buffer)
+
+            while reader.has_next():
+                key, value = reader.read()
+                yield (key, value)
+
     def __contains__(self: Self, key: Bytes32) -> bool:
         """Проверить наличие ключа."""
         try:
             self.get(key)
-        except KeyError:
+        except (KeyError, OSError):
             return False
         else:
             return True

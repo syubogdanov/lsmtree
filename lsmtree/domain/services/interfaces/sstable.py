@@ -22,6 +22,10 @@ class SortedStringTable(Protocol):
         """Построить песочную `SSTable`."""
 
     @abstractmethod
+    def over_sandbox(self: Self) -> SortedIterator[tuple[Bytes32, Bytes32 | None]]:
+        """Получить итератор по таблице из песочницы."""
+
+    @abstractmethod
     def __contains__(self: Self, key: Bytes32) -> bool:
         """Проверить наличие ключа."""
 

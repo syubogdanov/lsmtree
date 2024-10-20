@@ -1,18 +1,19 @@
 from abc import abstractmethod
-from collections.abc import Hashable
 from io import BufferedReader, BufferedWriter
 from typing import Protocol, Self
+
+from lsmtree.domain.dtypes.bytes32 import Bytes32
 
 
 class BloomFilter(Protocol):
     """Интерфейс фильтра Блума."""
 
     @abstractmethod
-    def test(self: Self, data: Hashable) -> bool:
+    def test(self: Self, data: Bytes32) -> bool:
         """Проверить, может ли объект быть в множестве."""
 
     @abstractmethod
-    def add(self: Self, data: Hashable) -> None:
+    def add(self: Self, data: Bytes32) -> None:
         """Добавить объект в фильтр Блума."""
 
     @abstractmethod
